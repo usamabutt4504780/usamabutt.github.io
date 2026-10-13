@@ -51,9 +51,28 @@ if (prefersReducedMotion || !("IntersectionObserver" in window)) {
   });
 }
 
+if (!prefersReducedMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  document.querySelectorAll(".project-card, .employer-card").forEach((card) => {
+    if (!(card instanceof HTMLElement)) return;
+    card.addEventListener("pointermove", (event) => {
+      if (!(event instanceof PointerEvent) || (event.pointerType !== "mouse" && event.pointerType !== "pen")) return;
+      const bounds = card.getBoundingClientRect();
+      const x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
+      const y = ((event.clientY - bounds.top) / bounds.height) * 2 - 1;
+      card.style.setProperty("--tilt-x", `${-y * 4}deg`);
+      card.style.setProperty("--tilt-y", `${x * 5}deg`);
+    });
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--tilt-x", "0deg");
+      card.style.setProperty("--tilt-y", "0deg");
+    });
+  });
+}
+
 const employerGrid = document.querySelector(".employer-grid");
 if (employerGrid instanceof HTMLElement) {
   employerGrid.addEventListener("pointerover", (event) => {
+    if (event instanceof PointerEvent && event.pointerType === "touch") return;
     if (!(event.target instanceof Element)) return;
     const card = event.target.closest(".employer-card");
     if (!(card instanceof HTMLElement) || (event.relatedTarget instanceof Node && card.contains(event.relatedTarget))) return;
@@ -67,6 +86,7 @@ if (employerGrid instanceof HTMLElement) {
   });
 
   employerGrid.addEventListener("pointerout", (event) => {
+    if (event instanceof PointerEvent && event.pointerType === "touch") return;
     if (!(event.target instanceof Element)) return;
     const card = event.target.closest(".employer-card");
     if (!(card instanceof HTMLElement) || (event.relatedTarget instanceof Node && card.contains(event.relatedTarget))) return;
@@ -170,73 +190,71 @@ if (
   const voiceControl = twinChat.querySelector("#twin-voice-control");
   const voiceStatus = twinChat.querySelector("#twin-voice-status");
   let characterWaveUntil = 0;
-  let selectedAnswer = "";
-  let activeUtterance = null;
+  let selectedAnswerId = "";
+  let activeAudio = null;
 
   const stopAnswer = () => {
-    activeUtterance = null;
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    const audio = activeAudio;
+    activeAudio = null;
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
     if (voiceControl instanceof HTMLButtonElement) {
-      voiceControl.disabled = !selectedAnswer;
+      voiceControl.disabled = !selectedAnswerId;
       voiceControl.innerHTML = '<span aria-hidden="true">▶</span> Replay answer';
     }
-    if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Browser voice · not a voice clone";
+    if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Consistent generated voice · not a voice clone";
   };
 
-  const speakAnswer = (text) => {
-    if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
-      if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Voice playback isn’t available in this browser";
-      if (voiceControl instanceof HTMLButtonElement) voiceControl.disabled = true;
-      return;
-    }
-
-    activeUtterance = null;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.96;
-    utterance.pitch = 1.02;
-    const englishVoice = window.speechSynthesis.getVoices().find((voice) => voice.lang.toLowerCase().startsWith("en"));
-    if (englishVoice) utterance.voice = englishVoice;
-    utterance.onstart = () => {
-      if (activeUtterance !== utterance) return;
+  const speakAnswer = (id) => {
+    stopAnswer();
+    const audio = new Audio(`voice/${id}.wav`);
+    audio.preload = "none";
+    audio.onplay = () => {
+      if (activeAudio !== audio) return;
       if (voiceControl instanceof HTMLButtonElement) {
         voiceControl.disabled = false;
         voiceControl.innerHTML = '<span aria-hidden="true">Ⅱ</span> Stop voice';
       }
-      if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Speaking with your browser’s voice";
+      if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Playing consistent generated voice";
     };
-    utterance.onend = () => {
-      if (activeUtterance !== utterance) return;
-      activeUtterance = null;
+    audio.onended = () => {
+      if (activeAudio !== audio) return;
+      activeAudio = null;
       if (voiceControl instanceof HTMLButtonElement) {
         voiceControl.disabled = false;
         voiceControl.innerHTML = '<span aria-hidden="true">▶</span> Replay answer';
       }
-      if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Browser voice · not a voice clone";
+      if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Consistent generated voice · not a voice clone";
     };
-    utterance.onerror = (event) => {
-      if (activeUtterance !== utterance || event.error === "canceled" || event.error === "interrupted") return;
-      activeUtterance = null;
+    audio.onerror = () => {
+      if (activeAudio !== audio) return;
+      activeAudio = null;
       if (voiceControl instanceof HTMLButtonElement) {
         voiceControl.disabled = false;
         voiceControl.innerHTML = '<span aria-hidden="true">▶</span> Replay answer';
       }
       if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Voice playback failed. Try again.";
     };
-    activeUtterance = utterance;
+    activeAudio = audio;
     if (voiceControl instanceof HTMLButtonElement) voiceControl.disabled = false;
-    if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Browser voice · not a voice clone";
-    window.speechSynthesis.speak(utterance);
+    if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Consistent generated voice · not a voice clone";
+    void audio.play().catch(() => {
+      if (activeAudio !== audio) return;
+      activeAudio = null;
+      if (voiceControl instanceof HTMLButtonElement) voiceControl.innerHTML = '<span aria-hidden="true">▶</span> Replay answer';
+      if (voiceStatus instanceof HTMLElement) voiceStatus.textContent = "Voice playback failed. Try again.";
+    });
   };
 
   voiceControl?.addEventListener("click", () => {
-    if (activeUtterance && "speechSynthesis" in window && window.speechSynthesis.speaking) stopAnswer();
-    else if (selectedAnswer) speakAnswer(selectedAnswer);
+    if (activeAudio && !activeAudio.paused) stopAnswer();
+    else if (selectedAnswerId) speakAnswer(selectedAnswerId);
   });
   window.addEventListener("pagehide", () => {
-    activeUtterance = null;
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    activeAudio?.pause();
+    activeAudio = null;
   });
 
   const addTranscriptMessage = (role, text) => {
@@ -274,7 +292,7 @@ if (
     if (!(button instanceof HTMLButtonElement)) return;
     const response = questionAnswers[button.dataset.question];
     if (!response) return;
-    selectedAnswer = response.answer;
+    selectedAnswerId = button.dataset.question;
     if (voiceControl instanceof HTMLButtonElement) voiceControl.disabled = false;
     addTranscriptMessage("visitor", response.question);
     addTranscriptMessage("assistant", response.answer);
@@ -283,7 +301,7 @@ if (
       prompt.classList.toggle("is-selected", prompt === button);
     });
     characterWaveUntil = performance.now() + 1800;
-    speakAnswer(response.answer);
+    speakAnswer(selectedAnswerId);
   });
 
   const initializeCharacter = async () => {
@@ -479,7 +497,7 @@ if (
         character.rotation.x += (pointerTarget.y - character.rotation.x) * 0.045;
         head.rotation.y += (pointerTarget.x * 0.55 - head.rotation.y) * 0.06;
         head.rotation.x += (-pointerTarget.y * 0.45 - head.rotation.x) * 0.06;
-        const speaking = "speechSynthesis" in window && window.speechSynthesis.speaking;
+        const speaking = activeAudio !== null && !activeAudio.paused;
         smileMesh.visible = !speaking;
         speakingMouth.visible = speaking;
         speakingMouth.scale.y = speaking ? 0.025 + Math.abs(Math.sin(elapsed * 15)) * 0.065 : 0.018;

@@ -182,11 +182,13 @@ function EmployerCard({ employer }: { employer: Employer }) {
   return (
     <article
       className={`employer-card${isActive ? " is-active" : ""}`}
-      onPointerEnter={() => {
+      onPointerEnter={(event) => {
+        if (event.pointerType === "touch") return;
         setIsDismissed(false);
         setIsHovered(true);
       }}
-      onPointerLeave={() => {
+      onPointerLeave={(event) => {
+        if (event.pointerType === "touch") return;
         setIsHovered(false);
         setIsDismissed(false);
       }}
@@ -219,7 +221,7 @@ function EmployerCard({ employer }: { employer: Employer }) {
           <span>{employer.roles[0][0]}</span>
         </span>
         <span className="employer-open-indicator" aria-hidden="true">+</span>
-        <span className="employer-hover-cue">HOVER OR SELECT TO EXPLORE</span>
+        <span className="employer-hover-cue">HOVER, TAP OR SELECT TO EXPLORE</span>
       </button>
       <div className="employer-card-details" id={detailsId} aria-hidden={!isActive}>
         <button
@@ -363,21 +365,25 @@ const navigation = [
 
 const portfolioQuestions = [
   {
+    id: "role",
     question: "What do you do?",
     answer:
       "I’m a Principal Engineer and Enterprise Systems Architect. I lead the architecture and delivery of enterprise platforms, ERP, and workflow applications, from early technical decisions through production.",
   },
   {
+    id: "projects",
     question: "What kind of work have you led?",
     answer:
       "I’ve worked across enterprise platforms, ERP and workflow systems, real-time collaboration products, and a tender-bidding application. My work often brings together architecture, integrations, cloud infrastructure, and hands-on delivery.",
   },
   {
+    id: "technology",
     question: "What technologies do you work with?",
     answer:
       "My toolkit includes Azure and AWS, Node.js, React, Vue, Angular, SQL and NoSQL databases, Camunda, Alfresco, Firebase, Socket.IO, and AI/LLM integrations, alongside PHP and Electron.",
   },
   {
+    id: "leadership",
     question: "How do you lead a team?",
     answer:
       "I set a clear technical direction, stay close to implementation, and collaborate with product, DevOps, and stakeholders. I also mentor engineers and help teams build dependable delivery practices.",
@@ -393,7 +399,7 @@ export default function Home() {
   const [year, setYear] = useState(2026);
   const [selectedQuestion, setSelectedQuestion] = useState<(typeof portfolioQuestions)[number] | null>(null);
   const [interactionToken, setInteractionToken] = useState(0);
-  const [voiceStatus, setVoiceStatus] = useState<"idle" | "speaking" | "unavailable" | "error">("idle");
+  const [voiceStatus, setVoiceStatus] = useState<"idle" | "speaking" | "error">("idle");
   const [conversationMessages, setConversationMessages] = useState<
     Array<{ role: "assistant" | "visitor"; text: string }>
   >([
@@ -403,7 +409,7 @@ export default function Home() {
     },
   ]);
   const transcriptRef = useRef<HTMLDivElement>(null);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     setYear(new Date().getFullYear());
@@ -441,6 +447,43 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    ) {
+      return;
+    }
+
+    const cards = document.querySelectorAll<HTMLElement>(".project-card, .employer-card");
+    const handlePointerMove = (card: HTMLElement, event: PointerEvent) => {
+      if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+      const bounds = card.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width * 2 - 1;
+      const y = (event.clientY - bounds.top) / bounds.height * 2 - 1;
+      card.style.setProperty("--tilt-x", `${-y * 4}deg`);
+      card.style.setProperty("--tilt-y", `${x * 5}deg`);
+    };
+    const resetTilt = (card: HTMLElement) => {
+      card.style.setProperty("--tilt-x", "0deg");
+      card.style.setProperty("--tilt-y", "0deg");
+    };
+
+    const cleanups: Array<() => void> = [];
+    cards.forEach((card) => {
+      const move = (event: PointerEvent) => handlePointerMove(card, event);
+      const leave = () => resetTilt(card);
+      card.addEventListener("pointermove", move);
+      card.addEventListener("pointerleave", leave);
+      cleanups.push(() => {
+        card.removeEventListener("pointermove", move);
+        card.removeEventListener("pointerleave", leave);
+      });
+    });
+
+    return () => cleanups.forEach((cleanup) => cleanup());
+  }, []);
+
+  useEffect(() => {
     const transcript = transcriptRef.current;
     if (!transcript) return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -449,50 +492,44 @@ export default function Home() {
 
   useEffect(
     () => () => {
-      utteranceRef.current = null;
-      window.speechSynthesis?.cancel();
+      audioRef.current?.pause();
+      audioRef.current = null;
     },
     [],
   );
 
-  const speakAnswer = (text: string) => {
-    if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
-      setVoiceStatus("unavailable");
-      return;
-    }
-
-    utteranceRef.current = null;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.96;
-    utterance.pitch = 1.02;
-    const englishVoice = window.speechSynthesis.getVoices().find((voice) => voice.lang.toLowerCase().startsWith("en"));
-    if (englishVoice) utterance.voice = englishVoice;
-    utterance.onstart = () => {
-      if (utteranceRef.current !== utterance) return;
-      setVoiceStatus("speaking");
-    };
-    utterance.onend = () => {
-      if (utteranceRef.current !== utterance) return;
-      utteranceRef.current = null;
-      setVoiceStatus("idle");
-    };
-    utterance.onerror = (event) => {
-      if (utteranceRef.current !== utterance || event.error === "canceled" || event.error === "interrupted") return;
-      utteranceRef.current = null;
-      setVoiceStatus("error");
-    };
-
-    utteranceRef.current = utterance;
+  const stopAnswer = () => {
+    const audio = audioRef.current;
+    audioRef.current = null;
+    audio?.pause();
+    if (audio) audio.currentTime = 0;
     setVoiceStatus("idle");
-    window.speechSynthesis.speak(utterance);
   };
 
-  const stopAnswer = () => {
-    utteranceRef.current = null;
-    window.speechSynthesis.cancel();
-    setVoiceStatus("idle");
+  const speakAnswer = (id: string) => {
+    stopAnswer();
+    const audio = new Audio(`/voice/${id}.wav`);
+    audio.preload = "none";
+    audio.onplay = () => {
+      if (audioRef.current !== audio) return;
+      setVoiceStatus("speaking");
+    };
+    audio.onended = () => {
+      if (audioRef.current !== audio) return;
+      audioRef.current = null;
+      setVoiceStatus("idle");
+    };
+    audio.onerror = () => {
+      if (audioRef.current !== audio) return;
+      audioRef.current = null;
+      setVoiceStatus("error");
+    };
+    audioRef.current = audio;
+    void audio.play().catch(() => {
+      if (audioRef.current !== audio) return;
+      audioRef.current = null;
+      setVoiceStatus("error");
+    });
   };
 
   return (
@@ -561,7 +598,7 @@ export default function Home() {
                   <button
                     className={`twin-prompt${selectedQuestion?.question === item.question ? " is-selected" : ""}`}
                     type="button"
-                    key={item.question}
+                    key={item.id}
                     aria-pressed={selectedQuestion?.question === item.question}
                     onClick={() => {
                       setSelectedQuestion(item);
@@ -572,7 +609,7 @@ export default function Home() {
                         { role: "assistant", text: item.answer },
                       ]);
                       setInteractionToken((token) => token + 1);
-                      speakAnswer(item.answer);
+                      speakAnswer(item.id);
                     }}
                   >
                     {item.question}<span aria-hidden="true">↗</span>
@@ -584,10 +621,10 @@ export default function Home() {
                   <button
                     className="twin-voice-button"
                     type="button"
-                    disabled={!selectedQuestion || voiceStatus === "unavailable"}
+                    disabled={!selectedQuestion}
                     onClick={() => {
                       if (voiceStatus === "speaking") stopAnswer();
-                      else if (selectedQuestion) speakAnswer(selectedQuestion.answer);
+                      else if (selectedQuestion) speakAnswer(selectedQuestion.id);
                     }}
                   >
                     <span aria-hidden="true">{voiceStatus === "speaking" ? "Ⅱ" : "▶"}</span>
@@ -595,12 +632,10 @@ export default function Home() {
                   </button>
                   <span className="twin-voice-note" aria-live="polite">
                     {voiceStatus === "speaking"
-                      ? "Speaking with your browser’s voice"
-                      : voiceStatus === "unavailable"
-                        ? "Voice playback isn’t available in this browser"
-                        : voiceStatus === "error"
-                          ? "Voice playback failed. Try again."
-                          : "Browser voice · not a voice clone"}
+                      ? "Playing consistent generated voice"
+                      : voiceStatus === "error"
+                        ? "Voice playback failed. Try again."
+                        : "Consistent generated voice · not a voice clone"}
                   </span>
                 </div>
                 <a href="#projects">Browse the portfolio <span aria-hidden="true">↓</span></a>
@@ -680,7 +715,7 @@ export default function Home() {
             {employers.map((employer) => <EmployerCard employer={employer} key={employer.number} />)}
           </div>
           <p className="employer-hint">
-            Hover or focus a card to explore the roles, teams, and contributions.
+            Hover, tap, or focus a card to explore the roles, teams, and contributions. Selected details stay open until closed.
           </p>
         </section>
 

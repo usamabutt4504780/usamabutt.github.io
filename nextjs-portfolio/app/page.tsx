@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import ThreeCharacter from "./three-character";
 
 const technologies = [
   ["Microsoft Azure", "azure/azure-original.svg"],
@@ -8,117 +9,225 @@ const technologies = [
   ["Socket.IO", "socketio/socketio-original.svg"],
   ["Firebase", "firebase/firebase-plain.svg"],
   ["Electron", "electron/electron-original.svg"],
+  ["React", "react/react-original.svg"],
+  ["Vue", "vuejs/vuejs-original.svg"],
+  ["AWS", "amazonwebservices/amazonwebservices-original-wordmark.svg"],
   ["PHP", "php/php-original.svg"],
-  ["AngularJS", "angularjs/angularjs-original.svg"],
-  ["Java", "java/java-original.svg"],
+  ["Angular", "angular/angular-original.svg"],
   ["WordPress", "wordpress/wordpress-original.svg"],
 ];
 
 const additionalTools = [
+  "SQL & NoSQL databases",
   "Camunda BPM",
   "Alfresco",
-  "Microsoft Dynamics CRM",
   "Twilio",
   "OAuth 2.0",
-  "AI / LLM integrations",
 ];
 
-const experiences = [
-  {
-    date: "JAN 2024 — PRESENT",
-    role: "Principal Consultant",
-    company: "Systems Limited",
-    description:
-      "Lead architecture and delivery for enterprise platforms, ERP, and workflow applications. Drive emerging-technology POCs; define microservices, data schemas, and integrations; own Azure infrastructure; and lead engineering practices and CI/CD with DevOps.",
-    tags: "AZURE · ERP · MICROSERVICES · CAMUNDA · ALFRESCO",
-  },
-  {
-    date: "JAN 2023 — DEC 2023",
-    role: "Senior Software Consultant",
-    company: "Systems Limited",
-    description:
-      "Delivered enterprise features across distributed systems, mentored engineers, and contributed to architectural decisions, sprint planning, and technical estimates.",
-  },
-  {
-    date: "OCT 2021 — DEC 2022",
-    role: "Development Consultant",
-    company: "Systems Limited",
-    description:
-      "Designed backend services and scalable APIs with Node.js and microservices patterns, collaborating with QA and DevOps on performance and production stability.",
-  },
-  {
-    date: "JUN 2020 — OCT 2021",
-    role: "Software Engineer",
-    company: "Daniotech",
-    description:
-      "Built real-time collaboration with Socket.IO, Firebase authentication and notifications, analytics, and Electron desktop applications.",
-  },
-  {
-    date: "OCT 2019 — MAY 2020",
-    role: "Software Engineer",
-    company: "Softnotechs",
-    description:
-      "Customized POS software, built PHP and AngularJS applications, published Android apps, and delivered WordPress websites.",
-  },
-  {
-    date: "JAN 2018 — MAR 2020",
-    role: "Co-Founder & Web Developer",
-    company: "Grab a Bite",
-    description:
-      "Co-founded a startup, built its web platform from scratch, and contributed to architecture, customer relationships, and daily operations.",
-  },
-  {
-    date: "OCT 2016 — APR 2017",
-    role: "Software Developer",
-    company: "Atlantic Software",
-    description:
-      "Developed ActionScript 3 games and supported QA for PHP enterprise applications.",
-  },
-  {
-    date: "JUN 2015 — AUG 2015",
-    role: "Internee",
-    company: "Systems Limited",
-    description:
-      "Worked with Microsoft Dynamics CRM to map campus management software in collaboration with the Dynamics team.",
-  },
-];
+type Employer = {
+  number: string;
+  name: string;
+  monogram: string;
+  period: string;
+  arrangement: string;
+  roles: Array<[string, string]>;
+  highlights: string[];
+  url?: string;
+};
 
-const projects = [
+const employers: Employer[] = [
   {
     number: "01",
-    name: "SimplyCharge",
-    description: "Project website.",
-    url: "https://simplycharge.info/",
-    action: "Visit project",
-    category: "SIMPLYCHARGE.INFO",
-    kind: "orbit",
+    name: "Systems Limited",
+    monogram: "SL",
+    period: "2021 — PRESENT",
+    arrangement: "Full-time · Hybrid",
+    roles: [
+      ["Principal Consultant", "Jan 2024 — Present"],
+      ["Senior Software Consultant", "Jan 2023 — Dec 2023"],
+      ["Development Consultant", "Oct 2021 — Dec 2022"],
+      ["Internee", "Jun 2015 — Aug 2015"],
+    ],
+    highlights: [
+      "Lead architecture and development of enterprise ERP and workflow platforms.",
+      "Design microservices, database schemas, system integrations, and Azure infrastructure.",
+      "Deliver Camunda BPM workflows, Alfresco document management, and emerging-technology POCs.",
+      "Guide code reviews, engineering practices, CI/CD, technical estimates, and engineer mentorship.",
+      "Integrate Twilio, Firebase, Google APIs, and OAuth2 SSO, including Apple, Google, and Outlook sign-in.",
+    ],
+    url: "https://www.linkedin.com/company/15350/",
   },
   {
     number: "02",
-    name: "FashionPedia Dashboard",
-    description: "Dashboard project.",
-    url: "https://dashboard.fashionspedia.com",
-    action: "Visit dashboard",
-    category: "DASHBOARD.FASHIONSPEDIA.COM",
-    kind: "fashion",
+    name: "Daniotech",
+    monogram: "D",
+    period: "JUN 2020 — OCT 2021",
+    arrangement: "Full-time · Pakistan",
+    roles: [["Software Engineer", "Jun 2020 — Oct 2021"]],
+    highlights: [
+      "Built real-time collaboration features with Socket.IO.",
+      "Implemented Firebase authentication, notifications, push messaging, and analytics.",
+      "Developed Electron desktop apps for time and activity tracking.",
+      "Contributed to QA, release validation, and cross-functional delivery.",
+    ],
   },
   {
     number: "03",
-    name: "Descon tender bidding app",
-    description: "Bidding and tender web app built for Descon.",
-    url: "https://www.descon.com/",
-    action: "Visit Descon",
-    category: "TENDER · BIDDING",
-    kind: "descon",
+    name: "Softnotechs",
+    monogram: "S",
+    period: "OCT 2019 — MAY 2020",
+    arrangement: "Full-time · Hybrid",
+    roles: [["Software Engineer", "Oct 2019 — May 2020"]],
+    highlights: [
+      "Customized and enhanced point-of-sale systems with PHP and AngularJS.",
+      "Developed and published Android apps using Java, Firebase Cloud Messaging, and ad integrations.",
+      "Built WordPress websites for business clients.",
+      "Managed mobile app delivery from research through Play Store release.",
+    ],
+  },
+  {
+    number: "04",
+    name: "Grab a Bite",
+    monogram: "GB",
+    period: "JAN 2018 — MAR 2020",
+    arrangement: "Co-founder · Self-employed",
+    roles: [["Co-Founder & Web Developer", "Jan 2018 — Mar 2020"]],
+    highlights: [
+      "Co-founded a startup and built its web platform from the ground up.",
+      "Designed the system architecture and made hands-on product decisions.",
+      "Handled client relationships and supported daily business operations.",
+      "Gained end-to-end experience in product development, scaling, and operations.",
+    ],
+  },
+  {
+    number: "05",
+    name: "Atlantic Software",
+    monogram: "AS",
+    period: "OCT 2016 — APR 2017",
+    arrangement: "Full-time",
+    roles: [["Software Developer", "Oct 2016 — Apr 2017"]],
+    highlights: [
+      "Developed games using ActionScript 3.",
+      "Supported QA for PHP enterprise applications.",
+      "Worked with cross-functional teams on software delivery and testing.",
+    ],
   },
 ];
+
+function EmployerCard({ employer }: { employer: Employer }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
+  const isActive = !isDismissed && (isOpen || isHovered || isFocused);
+  const detailsId = `employer-details-${employer.number}`;
+
+  return (
+    <article
+      className={`employer-card${isActive ? " is-active" : ""}`}
+      onPointerEnter={() => {
+        setIsDismissed(false);
+        setIsHovered(true);
+      }}
+      onPointerLeave={() => {
+        setIsHovered(false);
+        setIsDismissed(false);
+      }}
+      onFocusCapture={() => {
+        setIsDismissed(false);
+        setIsFocused(true);
+      }}
+      onBlurCapture={(event) => {
+        if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) {
+          setIsFocused(false);
+        }
+      }}
+    >
+      <button
+        className="employer-card-front"
+        type="button"
+        aria-expanded={isActive}
+        aria-controls={detailsId}
+        onClick={() => {
+          setIsDismissed(false);
+          setIsFocused(false);
+          setIsOpen((open) => !open);
+        }}
+      >
+        <span className="employer-index">{employer.number}</span>
+        <span className="employer-monogram" aria-hidden="true">{employer.monogram}</span>
+        <span className="employer-front-copy">
+          <span className="employer-period">{employer.period}</span>
+          <strong>{employer.name}</strong>
+          <span>{employer.roles[0][0]}</span>
+        </span>
+        <span className="employer-open-indicator" aria-hidden="true">+</span>
+        <span className="employer-hover-cue">HOVER OR SELECT TO EXPLORE</span>
+      </button>
+      <div className="employer-card-details" id={detailsId} aria-hidden={!isActive}>
+        <button
+          className="employer-close"
+          type="button"
+          aria-label={`Close ${employer.name} details`}
+          onClick={() => {
+            setIsDismissed(true);
+            setIsFocused(false);
+            setIsOpen(false);
+          }}
+        >
+          ×
+        </button>
+        <div className="employer-details-heading">
+          <span>{employer.arrangement}</span>
+          <strong>{employer.name}</strong>
+        </div>
+        <div className="employer-roles">
+          {employer.roles.map(([role, dates]) => (
+            <span key={role}><strong>{role}</strong><small>{dates}</small></span>
+          ))}
+        </div>
+        <ul>
+          {employer.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+        </ul>
+        {employer.url && (
+          <a href={employer.url} target="_blank" rel="noreferrer">
+            Company profile <ExternalArrow />
+          </a>
+        )}
+      </div>
+    </article>
+  );
+}
 
 const navigation = [
   ["Technologies", "#technologies"],
   ["Projects", "#work"],
-  ["Experience", "#experience"],
   ["About", "#about"],
   ["Contact", "#contact"],
+];
+
+const portfolioQuestions = [
+  {
+    question: "What do you do?",
+    answer:
+      "I’m a Principal Engineer and Enterprise Systems Architect. I lead the architecture and delivery of enterprise platforms, ERP, and workflow applications, from early technical decisions through production.",
+  },
+  {
+    question: "What kind of work have you led?",
+    answer:
+      "I’ve worked across enterprise platforms, ERP and workflow systems, real-time collaboration products, and a tender-bidding application. My work often brings together architecture, integrations, cloud infrastructure, and hands-on delivery.",
+  },
+  {
+    question: "What technologies do you work with?",
+    answer:
+      "My toolkit includes Azure and AWS, Node.js, React, Vue, Angular, SQL and NoSQL databases, Camunda, Alfresco, Firebase, Socket.IO, and AI/LLM integrations, alongside PHP and Electron.",
+  },
+  {
+    question: "How do you lead a team?",
+    answer:
+      "I set a clear technical direction, stay close to implementation, and collaborate with product, DevOps, and stakeholders. I also mentor engineers and help teams build dependable delivery practices.",
+  },
 ];
 
 function ExternalArrow() {
@@ -128,6 +237,19 @@ function ExternalArrow() {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [year, setYear] = useState(2026);
+  const [selectedQuestion, setSelectedQuestion] = useState<(typeof portfolioQuestions)[number] | null>(null);
+  const [interactionToken, setInteractionToken] = useState(0);
+  const [voiceStatus, setVoiceStatus] = useState<"idle" | "speaking" | "unavailable" | "error">("idle");
+  const [conversationMessages, setConversationMessages] = useState<
+    Array<{ role: "assistant" | "visitor"; text: string }>
+  >([
+    {
+      role: "assistant",
+      text: "Hey, welcome in. Choose a question and I’ll tell you a little about the work, tools, and teams behind my portfolio.",
+    },
+  ]);
+  const transcriptRef = useRef<HTMLDivElement>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     setYear(new Date().getFullYear());
@@ -163,6 +285,61 @@ export default function Home() {
       document.documentElement.classList.remove("has-js");
     };
   }, []);
+
+  useEffect(() => {
+    const transcript = transcriptRef.current;
+    if (!transcript) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    transcript.scrollTo({ top: transcript.scrollHeight, behavior: reduceMotion ? "auto" : "smooth" });
+  }, [conversationMessages]);
+
+  useEffect(
+    () => () => {
+      utteranceRef.current = null;
+      window.speechSynthesis?.cancel();
+    },
+    [],
+  );
+
+  const speakAnswer = (text: string) => {
+    if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+      setVoiceStatus("unavailable");
+      return;
+    }
+
+    utteranceRef.current = null;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 0.96;
+    utterance.pitch = 1.02;
+    const englishVoice = window.speechSynthesis.getVoices().find((voice) => voice.lang.toLowerCase().startsWith("en"));
+    if (englishVoice) utterance.voice = englishVoice;
+    utterance.onstart = () => {
+      if (utteranceRef.current !== utterance) return;
+      setVoiceStatus("speaking");
+    };
+    utterance.onend = () => {
+      if (utteranceRef.current !== utterance) return;
+      utteranceRef.current = null;
+      setVoiceStatus("idle");
+    };
+    utterance.onerror = (event) => {
+      if (utteranceRef.current !== utterance || event.error === "canceled" || event.error === "interrupted") return;
+      utteranceRef.current = null;
+      setVoiceStatus("error");
+    };
+
+    utteranceRef.current = utterance;
+    setVoiceStatus("idle");
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const stopAnswer = () => {
+    utteranceRef.current = null;
+    window.speechSynthesis.cancel();
+    setVoiceStatus("idle");
+  };
 
   return (
     <>
@@ -200,61 +377,88 @@ export default function Home() {
 
       <main id="main">
         <section className="hero section-wrap" id="home">
-          <div className="hero-copy">
+          <div className="hero-copy hero-conversation">
             <p className="eyebrow reveal">
-              <span className="eyebrow-dot" /> Principal Engineer · Punjab, Pakistan
+              <span className="eyebrow-dot" /> Usama’s digital twin · Ask me about my work
             </p>
             <h1 className="hero-title reveal">
-              Building the
+              Let’s talk about
               <br />
-              systems behind
-              <br />
-              <span className="title-accent">
-                what’s <span className="serif-word">next.</span>
-              </span>
+              <span className="title-accent">what I <span className="serif-word">build.</span></span>
             </h1>
-            <p className="hero-description reveal">
-              I’m <strong>Usama Ahmed</strong>, a Principal Engineer and Enterprise Systems Architect with 9+ years
-              of experience taking complex platforms from idea to production.
-            </p>
-            <p className="hero-description hero-description-secondary reveal">
-              Azure cloud · Microservices · ERP · Workflow automation · AI integrations
-            </p>
-            <div className="hero-actions reveal">
-              <a className="button button-dark" href="#experience">
-                Explore my experience <span aria-hidden="true">↘</span>
-              </a>
-              <a className="text-link" href="#contact">
-                Get in touch <ExternalArrow />
-              </a>
+            <div className="twin-chat reveal" aria-label="Conversation with Usama’s digital twin">
+              <div className="twin-messages" ref={transcriptRef} role="log" aria-live="polite" aria-relevant="additions">
+                {conversationMessages.map((message, index) => (
+                  <div
+                    className={`twin-message${message.role === "visitor" ? " twin-message-visitor" : ""}`}
+                    key={`${index}-${message.role}`}
+                  >
+                    {message.role === "assistant" && <span className="twin-avatar" aria-hidden="true">UA</span>}
+                    <div className="twin-message-copy">
+                      {message.role === "assistant" && <p className="twin-speaker">USAMA’S DIGITAL TWIN</p>}
+                      <p className={message.role === "visitor" ? "twin-question" : "twin-response"}>{message.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="twin-prompts" aria-label="Suggested questions">
+                <p className="twin-prompt-label">PICK A QUESTION</p>
+                {portfolioQuestions.map((item) => (
+                  <button
+                    className={`twin-prompt${selectedQuestion?.question === item.question ? " is-selected" : ""}`}
+                    type="button"
+                    key={item.question}
+                    aria-pressed={selectedQuestion?.question === item.question}
+                    onClick={() => {
+                      setSelectedQuestion(item);
+                      setVoiceStatus("idle");
+                      setConversationMessages((messages) => [
+                        ...messages,
+                        { role: "visitor", text: item.question },
+                        { role: "assistant", text: item.answer },
+                      ]);
+                      setInteractionToken((token) => token + 1);
+                      speakAnswer(item.answer);
+                    }}
+                  >
+                    {item.question}<span aria-hidden="true">↗</span>
+                  </button>
+                ))}
+              </div>
+              <div className="twin-footer">
+                <div className="twin-voice-controls">
+                  <button
+                    className="twin-voice-button"
+                    type="button"
+                    disabled={!selectedQuestion || voiceStatus === "unavailable"}
+                    onClick={() => {
+                      if (voiceStatus === "speaking") stopAnswer();
+                      else if (selectedQuestion) speakAnswer(selectedQuestion.answer);
+                    }}
+                  >
+                    <span aria-hidden="true">{voiceStatus === "speaking" ? "Ⅱ" : "▶"}</span>
+                    {voiceStatus === "speaking" ? "Stop voice" : "Replay answer"}
+                  </button>
+                  <span className="twin-voice-note" aria-live="polite">
+                    {voiceStatus === "speaking"
+                      ? "Speaking with your browser’s voice"
+                      : voiceStatus === "unavailable"
+                        ? "Voice playback isn’t available in this browser"
+                        : voiceStatus === "error"
+                          ? "Voice playback failed. Try again."
+                          : "Browser voice · not a voice clone"}
+                  </span>
+                </div>
+                <a href="#work">Browse the portfolio <span aria-hidden="true">↓</span></a>
+              </div>
             </div>
           </div>
 
-          <div
-            className="hero-art reveal"
-            aria-label="Abstract blue illustration representing connected systems"
-            role="img"
-          >
-            <div className="art-grid" />
-            <div className="art-sun" />
-            <div className="art-orbit art-orbit-one" />
-            <div className="art-orbit art-orbit-two" />
-            <div className="art-asterisk" aria-hidden="true">
-              ✳
-            </div>
-            <div className="art-caption">
-              <span>ARCHITECTURE · DELIVERY</span>
-              <span>✳ 01 / 03</span>
-            </div>
-            <div className="art-sticker">
-              <span>
-                Ideas to
-                <br />
-                production.
-              </span>
-              <span aria-hidden="true">↗</span>
-            </div>
-          </div>
+          <ThreeCharacter
+            className="reveal"
+            interactionToken={interactionToken}
+            isSpeaking={voiceStatus === "speaking"}
+          />
 
           <a className="scroll-cue" href="#work">
             <span /> Scroll to explore
@@ -298,101 +502,31 @@ export default function Home() {
             {additionalTools.map((tool) => (
               <span key={tool}>{tool}</span>
             ))}
+            <span className="technology-tag-featured">LLM / AI</span>
           </div>
         </section>
 
         <section className="work section-wrap" id="work">
           <div className="section-heading reveal">
             <div>
-              <p className="eyebrow">Where I create the most impact</p>
+              <p className="eyebrow">The teams behind the work</p>
               <h2>
-                Selected <span className="serif-word">projects</span>
+                Companies <span className="serif-word">&amp; roles</span>
                 <span className="heading-period">.</span>
               </h2>
             </div>
             <p className="section-note">
-              A few platforms I’ve worked on
+              Explore the teams I’ve worked with
               <br />
-              across different industries.
+              and what I contributed.
             </p>
           </div>
 
-          <div className="project-grid">
-            {projects.map((project, index) => (
-              <article
-                className={`project-card reveal transition-transform duration-300 hover:-translate-y-1${index === 0 ? " project-card-wide" : ""}`}
-                key={project.number}
-              >
-                <div className={`project-visual visual-${project.kind}`}>
-                  <span className="project-number">{project.number}</span>
-                  {project.kind === "orbit" && (
-                    <>
-                      <div className="orbit-mark" aria-hidden="true">
-                        <span />
-                        <i />
-                      </div>
-                      <span className="visual-label">SimplyCharge</span>
-                    </>
-                  )}
-                  {project.kind === "fashion" && (
-                    <>
-                      <div className="coral-type">
-                        Fashions
-                        <br />
-                        <span>pedia</span>
-                      </div>
-                      <span className="coral-circle" aria-hidden="true">
-                        project
-                        <br />
-                        dashboard
-                      </span>
-                    </>
-                  )}
-                  {project.kind === "descon" && (
-                    <div className="lime-window">
-                      <div className="window-top">
-                        <span />
-                        <span />
-                        <span />
-                        <b>descon · tenders</b>
-                      </div>
-                      <div className="window-content">
-                        <span>
-                          TENDER
-                          <br />
-                          BIDDING
-                          <br />
-                          <i>PLATFORM.</i>
-                        </span>
-                        <b aria-hidden="true">✳</b>
-                      </div>
-                    </div>
-                  )}
-                  <a
-                    className="project-arrow"
-                    href={project.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`Visit ${project.name}`}
-                  >
-                    <ExternalArrow />
-                  </a>
-                </div>
-                <div className="project-meta">
-                  <div>
-                    <h3>{project.name}</h3>
-                    <p>{project.description}</p>
-                    <a className="project-visit" href={project.url} target="_blank" rel="noreferrer">
-                      {project.action} <ExternalArrow />
-                    </a>
-                  </div>
-                  <span className="project-category">{project.category}</span>
-                </div>
-              </article>
-            ))}
+          <div className="employer-grid">
+            {employers.map((employer) => <EmployerCard employer={employer} key={employer.number} />)}
           </div>
-          <p className="project-disclaimer">
-            The Descon link opens the company website; the tender app does not have a separate public link.
+          <p className="employer-hint">
+            Hover or focus a card to explore the roles, teams, and contributions.
           </p>
         </section>
 
@@ -414,72 +548,14 @@ export default function Home() {
                 and mentor engineers. I partner with product, DevOps, and stakeholders from architecture and database
                 design through CI/CD, cloud infrastructure, and production support.
               </p>
-              <a className="text-link text-link-light" href="#experience">
-                Explore my career <span aria-hidden="true">↘</span>
+              <a className="text-link text-link-light" href="#work">
+                Explore my work <span aria-hidden="true">↘</span>
               </a>
             </div>
             <div className="about-bottom reveal">
               <span>TECHNICAL STRATEGY · HANDS-ON ENGINEERING · TEAM LEADERSHIP</span>
               <span>IDEA&nbsp; → &nbsp;ARCHITECTURE&nbsp; → &nbsp;PRODUCTION</span>
             </div>
-          </div>
-        </section>
-
-        <section className="experience section-wrap" id="experience">
-          <div className="section-heading reveal">
-            <div>
-              <p className="eyebrow">A career in building what’s next</p>
-              <h2>
-                Experience &amp; <span className="serif-word">education</span>
-                <span className="heading-period">.</span>
-              </h2>
-            </div>
-            <p className="section-note">
-              More than nine years across enterprise
-              <br />
-              software, products, and platforms.
-            </p>
-          </div>
-          <div className="experience-layout">
-            <div className="timeline">
-              {experiences.map((experience) => (
-                <article className="timeline-entry reveal" key={experience.date}>
-                  <span className="timeline-date">{experience.date}</span>
-                  <div>
-                    <h3>
-                      {experience.role} <span>· {experience.company}</span>
-                    </h3>
-                    <p>{experience.description}</p>
-                    {experience.tags && <span className="timeline-tags">{experience.tags}</span>}
-                  </div>
-                </article>
-              ))}
-            </div>
-            <aside className="credentials reveal">
-              <div className="credential-block">
-                <p className="eyebrow">Education</p>
-                <h3>BS, Computer Science</h3>
-                <p>
-                  Sir Syed CASE Institute of Technology
-                  <br />
-                  2012 — 2016
-                </p>
-              </div>
-              <div className="credential-block">
-                <p className="eyebrow">Certification</p>
-                <h3>Big Data Certified</h3>
-              </div>
-              <div className="credential-block">
-                <p className="eyebrow">Top skills</p>
-                <div className="skill-pills">
-                  {["System Architecture", "Microservices", "ERP Software", "Azure", "AI / LLM", "Technical Leadership"].map(
-                    (skill) => (
-                      <span key={skill}>{skill}</span>
-                    ),
-                  )}
-                </div>
-              </div>
-            </aside>
           </div>
         </section>
 

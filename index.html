@@ -7,7 +7,7 @@
       name="description"
       content="Usama Ahmed is a Principal Engineer and Enterprise Systems Architect specializing in Azure, microservices, ERP platforms, and AI integrations."
     />
-    <meta name="theme-color" content="#f7f9fc" />
+    <meta name="theme-color" content="#0b0f19" />
     <title>Usama Ahmed — Principal Engineer & Systems Architect</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,7 +36,6 @@
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <a href="#technologies">Technologies</a>
         <a href="#work">Projects</a>
-        <a href="#experience">Experience</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
         <a class="nav-availability" href="#contact"><span></span> Punjab, Pakistan</a>
@@ -45,34 +44,52 @@
 
     <main id="main">
       <section class="hero section-wrap" id="home">
-        <div class="hero-copy">
-          <p class="eyebrow reveal"><span class="eyebrow-dot"></span> Principal Engineer · Punjab, Pakistan</p>
+        <div class="hero-copy hero-conversation">
+          <p class="eyebrow reveal"><span class="eyebrow-dot"></span> Usama’s digital twin · Ask me about my work</p>
           <h1 class="hero-title reveal">
-            Building the<br />
-            systems behind<br />
-            <span class="title-accent">what’s <span class="serif-word">next.</span></span>
+            Let’s talk about<br />
+            <span class="title-accent">what I <span class="serif-word">build.</span></span>
           </h1>
-          <p class="hero-description reveal">
-            I’m <strong>Usama Ahmed</strong>, a Principal Engineer and Enterprise Systems Architect with
-            9+ years of experience taking complex platforms from idea to production.
-          </p>
-          <p class="hero-description hero-description-secondary reveal">
-            Azure cloud · Microservices · ERP · Workflow automation · AI integrations
-          </p>
-          <div class="hero-actions reveal">
-            <a class="button button-dark" href="#experience">Explore my experience <span aria-hidden="true">↘</span></a>
-            <a class="text-link" href="#contact">Get in touch <span aria-hidden="true">↗</span></a>
+          <div class="twin-chat reveal" aria-label="Conversation with Usama’s digital twin">
+            <div class="twin-messages" id="twin-messages" role="log" aria-live="polite" aria-relevant="additions">
+              <div class="twin-message">
+                <span class="twin-avatar" aria-hidden="true">UA</span>
+                <div class="twin-message-copy">
+                  <p class="twin-speaker">USAMA’S DIGITAL TWIN</p>
+                  <p class="twin-response">Hey, welcome in. Choose a question and I’ll tell you a little about the work, tools, and teams behind my portfolio.</p>
+                </div>
+              </div>
+            </div>
+            <div class="twin-prompts" aria-label="Suggested questions">
+              <p class="twin-prompt-label">PICK A QUESTION</p>
+              <button class="twin-prompt" type="button" data-question="role" aria-pressed="false">What do you do?<span aria-hidden="true">↗</span></button>
+              <button class="twin-prompt" type="button" data-question="projects" aria-pressed="false">What kind of work have you led?<span aria-hidden="true">↗</span></button>
+              <button class="twin-prompt" type="button" data-question="technology" aria-pressed="false">What technologies do you work with?<span aria-hidden="true">↗</span></button>
+              <button class="twin-prompt" type="button" data-question="leadership" aria-pressed="false">How do you lead a team?<span aria-hidden="true">↗</span></button>
+            </div>
+            <div class="twin-footer">
+              <div class="twin-voice-controls">
+                <button class="twin-voice-button" id="twin-voice-control" type="button" disabled>
+                  <span aria-hidden="true">▶</span> Replay answer
+                </button>
+                <span class="twin-voice-note" id="twin-voice-status" aria-live="polite">Browser voice · not a voice clone</span>
+              </div>
+              <a href="#work">Browse the portfolio <span aria-hidden="true">↓</span></a>
+            </div>
           </div>
         </div>
 
-        <div class="hero-art reveal" aria-label="Abstract blue illustration representing connected systems" role="img">
-          <div class="art-grid"></div>
-          <div class="art-sun"></div>
-          <div class="art-orbit art-orbit-one"></div>
-          <div class="art-orbit art-orbit-two"></div>
-          <div class="art-asterisk" aria-hidden="true">✳</div>
-          <div class="art-caption"><span>ARCHITECTURE · DELIVERY</span><span>✳ 01 / 03</span></div>
-          <div class="art-sticker"><span>Ideas to<br />production.</span><span aria-hidden="true">↗</span></div>
+        <div class="character-scene reveal" aria-label="Interactive Three.js engineer character">
+          <div class="character-canvas" aria-hidden="true"></div>
+          <div class="character-vignette" aria-hidden="true"></div>
+          <div class="character-label"><span class="character-label-dot"></span><span>CREATIVE SYSTEMS ENGINEER</span></div>
+          <div class="character-note">
+            <span class="character-note-icon" aria-hidden="true">✳</span>
+            <span><b>Ready when you are.</b><small>Choose a question to start a conversation.</small></span>
+          </div>
+          <p class="character-fallback" hidden>This interactive 3D scene needs WebGL support.</p>
+          <p class="character-caption"><span>BUILT WITH CURIOSITY</span><span>✳&nbsp; THREE.JS / 01</span></p>
+          <p class="character-sr-only">A friendly, interactive 3D engineer character in a blue futuristic scene. Move your pointer to look around or select Say hello to make the character wave.</p>
         </div>
 
         <a class="scroll-cue" href="#work"><span></span> Scroll to explore</a>
@@ -93,66 +110,126 @@
           <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/socketio/socketio-original.svg" alt="" loading="lazy" decoding="async" /></span><span>Socket.IO</span></div>
           <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-plain.svg" alt="" loading="lazy" decoding="async" /></span><span>Firebase</span></div>
           <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/electron/electron-original.svg" alt="" loading="lazy" decoding="async" /></span><span>Electron</span></div>
+          <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="" loading="lazy" decoding="async" /></span><span>React</span></div>
+          <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg" alt="" loading="lazy" decoding="async" /></span><span>Vue</span></div>
+          <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="" loading="lazy" decoding="async" /></span><span>AWS</span></div>
           <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg" alt="" loading="lazy" decoding="async" /></span><span>PHP</span></div>
-          <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angularjs/angularjs-original.svg" alt="" loading="lazy" decoding="async" /></span><span>AngularJS</span></div>
-          <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="" loading="lazy" decoding="async" /></span><span>Java</span></div>
+          <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angular/angular-original.svg" alt="" loading="lazy" decoding="async" /></span><span>Angular</span></div>
           <div class="technology-card reveal"><span class="technology-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/wordpress/wordpress-original.svg" alt="" loading="lazy" decoding="async" /></span><span>WordPress</span></div>
         </div>
         <div class="technology-tags reveal" aria-label="Additional tools and platforms">
-          <span>Camunda BPM</span><span>Alfresco</span><span>Microsoft Dynamics CRM</span><span>Twilio</span><span>OAuth 2.0</span><span>AI / LLM integrations</span>
+          <span>SQL &amp; NoSQL databases</span><span>Camunda BPM</span><span>Alfresco</span><span>Twilio</span><span>OAuth 2.0</span><span class="technology-tag-featured">LLM / AI</span>
         </div>
       </section>
 
       <section class="work section-wrap" id="work">
         <div class="section-heading reveal">
           <div>
-            <p class="eyebrow">Where I create the most impact</p>
-            <h2>Selected <span class="serif-word">projects</span><span class="heading-period">.</span></h2>
+            <p class="eyebrow">The teams behind the work</p>
+            <h2>Companies <span class="serif-word">&amp; roles</span><span class="heading-period">.</span></h2>
           </div>
-          <p class="section-note">A few platforms I’ve worked on<br />across different industries.</p>
+          <p class="section-note">Explore the teams I’ve worked with<br />and what I contributed.</p>
         </div>
 
-        <div class="project-grid">
-          <article class="project-card project-card-wide reveal">
-            <div class="project-visual visual-orbit">
-              <span class="project-number">01</span>
-              <div class="orbit-mark" aria-hidden="true"><span></span><i></i></div>
-              <span class="visual-label">SimplyCharge</span>
-              <a class="project-arrow" href="https://simplycharge.info/" target="_blank" rel="noreferrer" aria-label="Visit SimplyCharge">↗</a>
-            </div>
-            <div class="project-meta">
-              <div><h3>SimplyCharge</h3><p>Project website.</p><a class="project-visit" href="https://simplycharge.info/" target="_blank" rel="noreferrer">Visit project <span aria-hidden="true">↗</span></a></div>
-              <span class="project-category">SIMPLYCHARGE.INFO</span>
-            </div>
-          </article>
-          <article class="project-card reveal">
-            <div class="project-visual visual-coral">
-              <span class="project-number">02</span>
-              <div class="coral-type">Fashions<br /><span>pedia</span></div>
-              <span class="coral-circle" aria-hidden="true">project<br />dashboard</span>
-              <a class="project-arrow" href="https://dashboard.fashionspedia.com" target="_blank" rel="noreferrer" aria-label="Visit the FashionPedia dashboard">↗</a>
-            </div>
-            <div class="project-meta">
-              <div><h3>FashionPedia Dashboard</h3><p>Dashboard project.</p><a class="project-visit" href="https://dashboard.fashionspedia.com" target="_blank" rel="noreferrer">Visit dashboard <span aria-hidden="true">↗</span></a></div>
-              <span class="project-category">DASHBOARD.FASHIONSPEDIA.COM</span>
-            </div>
-          </article>
-          <article class="project-card reveal">
-            <div class="project-visual visual-lime">
-              <span class="project-number">03</span>
-              <div class="lime-window">
-                <div class="window-top"><span></span><span></span><span></span><b>descon · tenders</b></div>
-                <div class="window-content"><span>TENDER<br />BIDDING<br /><i>PLATFORM.</i></span><b aria-hidden="true">✳</b></div>
+        <div class="employer-grid">
+          <article class="employer-card">
+            <button class="employer-card-front" type="button" aria-expanded="false" aria-controls="employer-details-01">
+              <span class="employer-index">01</span><span class="employer-monogram" aria-hidden="true">SL</span>
+              <span class="employer-front-copy"><span class="employer-period">2021 — PRESENT</span><strong>Systems Limited</strong><span>Principal Consultant</span></span>
+              <span class="employer-open-indicator" aria-hidden="true">+</span><span class="employer-hover-cue">HOVER OR SELECT TO EXPLORE</span>
+            </button>
+            <div class="employer-card-details" id="employer-details-01" aria-hidden="true">
+              <button class="employer-close" type="button" aria-label="Close Systems Limited details">×</button>
+              <div class="employer-details-heading"><span>Full-time · Hybrid</span><strong>Systems Limited</strong></div>
+              <div class="employer-roles">
+                <span><strong>Principal Consultant</strong><small>Jan 2024 — Present</small></span>
+                <span><strong>Senior Software Consultant</strong><small>Jan 2023 — Dec 2023</small></span>
+                <span><strong>Development Consultant</strong><small>Oct 2021 — Dec 2022</small></span>
+                <span><strong>Internee</strong><small>Jun 2015 — Aug 2015</small></span>
               </div>
-              <a class="project-arrow" href="https://www.descon.com/" target="_blank" rel="noreferrer" aria-label="Visit Descon's public website">↗</a>
+              <ul>
+                <li>Lead architecture and development of enterprise ERP and workflow platforms.</li>
+                <li>Design microservices, database schemas, system integrations, and Azure infrastructure.</li>
+                <li>Deliver Camunda BPM workflows, Alfresco document management, and emerging-technology POCs.</li>
+                <li>Guide code reviews, engineering practices, CI/CD, technical estimates, and engineer mentorship.</li>
+                <li>Integrate Twilio, Firebase, Google APIs, and OAuth2 SSO, including Apple, Google, and Outlook sign-in.</li>
+              </ul>
+              <a href="https://www.linkedin.com/company/15350/" target="_blank" rel="noreferrer">Company profile <span aria-hidden="true">↗</span></a>
             </div>
-            <div class="project-meta">
-              <div><h3>Descon tender bidding app</h3><p>Bidding and tender web app built for Descon.</p><a class="project-visit" href="https://www.descon.com/" target="_blank" rel="noreferrer">Visit Descon <span aria-hidden="true">↗</span></a></div>
-              <span class="project-category">TENDER · BIDDING</span>
+          </article>
+          <article class="employer-card">
+            <button class="employer-card-front" type="button" aria-expanded="false" aria-controls="employer-details-02">
+              <span class="employer-index">02</span><span class="employer-monogram" aria-hidden="true">D</span>
+              <span class="employer-front-copy"><span class="employer-period">JUN 2020 — OCT 2021</span><strong>Daniotech</strong><span>Software Engineer</span></span>
+              <span class="employer-open-indicator" aria-hidden="true">+</span><span class="employer-hover-cue">HOVER OR SELECT TO EXPLORE</span>
+            </button>
+            <div class="employer-card-details" id="employer-details-02" aria-hidden="true">
+              <button class="employer-close" type="button" aria-label="Close Daniotech details">×</button>
+              <div class="employer-details-heading"><span>Full-time · Pakistan</span><strong>Daniotech</strong></div>
+              <div class="employer-roles"><span><strong>Software Engineer</strong><small>Jun 2020 — Oct 2021</small></span></div>
+              <ul>
+                <li>Built real-time collaboration features with Socket.IO.</li>
+                <li>Implemented Firebase authentication, notifications, push messaging, and analytics.</li>
+                <li>Developed Electron desktop apps for time and activity tracking.</li>
+                <li>Contributed to QA, release validation, and cross-functional delivery.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="employer-card">
+            <button class="employer-card-front" type="button" aria-expanded="false" aria-controls="employer-details-03">
+              <span class="employer-index">03</span><span class="employer-monogram" aria-hidden="true">S</span>
+              <span class="employer-front-copy"><span class="employer-period">OCT 2019 — MAY 2020</span><strong>Softnotechs</strong><span>Software Engineer</span></span>
+              <span class="employer-open-indicator" aria-hidden="true">+</span><span class="employer-hover-cue">HOVER OR SELECT TO EXPLORE</span>
+            </button>
+            <div class="employer-card-details" id="employer-details-03" aria-hidden="true">
+              <button class="employer-close" type="button" aria-label="Close Softnotechs details">×</button>
+              <div class="employer-details-heading"><span>Full-time · Hybrid</span><strong>Softnotechs</strong></div>
+              <div class="employer-roles"><span><strong>Software Engineer</strong><small>Oct 2019 — May 2020</small></span></div>
+              <ul>
+                <li>Customized and enhanced point-of-sale systems with PHP and AngularJS.</li>
+                <li>Developed and published Android apps using Java, Firebase Cloud Messaging, and ad integrations.</li>
+                <li>Built WordPress websites for business clients.</li>
+                <li>Managed mobile app delivery from research through Play Store release.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="employer-card">
+            <button class="employer-card-front" type="button" aria-expanded="false" aria-controls="employer-details-04">
+              <span class="employer-index">04</span><span class="employer-monogram" aria-hidden="true">GB</span>
+              <span class="employer-front-copy"><span class="employer-period">JAN 2018 — MAR 2020</span><strong>Grab a Bite</strong><span>Co-Founder &amp; Web Developer</span></span>
+              <span class="employer-open-indicator" aria-hidden="true">+</span><span class="employer-hover-cue">HOVER OR SELECT TO EXPLORE</span>
+            </button>
+            <div class="employer-card-details" id="employer-details-04" aria-hidden="true">
+              <button class="employer-close" type="button" aria-label="Close Grab a Bite details">×</button>
+              <div class="employer-details-heading"><span>Co-founder · Self-employed</span><strong>Grab a Bite</strong></div>
+              <div class="employer-roles"><span><strong>Co-Founder &amp; Web Developer</strong><small>Jan 2018 — Mar 2020</small></span></div>
+              <ul>
+                <li>Co-founded a startup and built its web platform from the ground up.</li>
+                <li>Designed the system architecture and made hands-on product decisions.</li>
+                <li>Handled client relationships and supported daily business operations.</li>
+                <li>Gained end-to-end experience in product development, scaling, and operations.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="employer-card">
+            <button class="employer-card-front" type="button" aria-expanded="false" aria-controls="employer-details-05">
+              <span class="employer-index">05</span><span class="employer-monogram" aria-hidden="true">AS</span>
+              <span class="employer-front-copy"><span class="employer-period">OCT 2016 — APR 2017</span><strong>Atlantic Software</strong><span>Software Developer</span></span>
+              <span class="employer-open-indicator" aria-hidden="true">+</span><span class="employer-hover-cue">HOVER OR SELECT TO EXPLORE</span>
+            </button>
+            <div class="employer-card-details" id="employer-details-05" aria-hidden="true">
+              <button class="employer-close" type="button" aria-label="Close Atlantic Software details">×</button>
+              <div class="employer-details-heading"><span>Full-time</span><strong>Atlantic Software</strong></div>
+              <div class="employer-roles"><span><strong>Software Developer</strong><small>Oct 2016 — Apr 2017</small></span></div>
+              <ul>
+                <li>Developed games using ActionScript 3.</li>
+                <li>Supported QA for PHP enterprise applications.</li>
+                <li>Worked with cross-functional teams on software delivery and testing.</li>
+              </ul>
             </div>
           </article>
         </div>
-        <p class="project-disclaimer">The Descon link opens the company website; the tender app does not have a separate public link.</p>
+        <p class="employer-hint">Hover, focus, or select a company card to explore roles and contributions.</p>
       </section>
 
       <section class="about" id="about">
@@ -165,97 +242,12 @@
               initiatives, and mentor engineers. I partner with product, DevOps, and stakeholders from
               architecture and database design through CI/CD, cloud infrastructure, and production support.
             </p>
-            <a class="text-link text-link-light" href="#experience">Explore my career <span aria-hidden="true">↘</span></a>
+            <a class="text-link text-link-light" href="#work">Explore my work <span aria-hidden="true">↘</span></a>
           </div>
           <div class="about-bottom reveal">
             <span>TECHNICAL STRATEGY · HANDS-ON ENGINEERING · TEAM LEADERSHIP</span>
             <span>IDEA&nbsp; → &nbsp;ARCHITECTURE&nbsp; → &nbsp;PRODUCTION</span>
           </div>
-        </div>
-      </section>
-
-      <section class="experience section-wrap" id="experience">
-        <div class="section-heading reveal">
-          <div>
-            <p class="eyebrow">A career in building what’s next</p>
-            <h2>Experience & <span class="serif-word">education</span><span class="heading-period">.</span></h2>
-          </div>
-          <p class="section-note">More than nine years across enterprise<br />software, products, and platforms.</p>
-        </div>
-        <div class="experience-layout">
-          <div class="timeline">
-            <article class="timeline-entry reveal">
-              <span class="timeline-date">JAN 2024 — PRESENT</span>
-              <div><h3>Principal Consultant <span>· Systems Limited</span></h3>
-                <p>Lead architecture and delivery for enterprise platforms, ERP, and workflow applications. Drive emerging-technology POCs; define microservices, data schemas, and integrations; own Azure infrastructure; and lead engineering practices and CI/CD with DevOps.</p>
-                <span class="timeline-tags">AZURE · ERP · MICROSERVICES · CAMUNDA · ALFRESCO</span>
-              </div>
-            </article>
-            <article class="timeline-entry reveal">
-              <span class="timeline-date">JAN 2023 — DEC 2023</span>
-              <div><h3>Senior Software Consultant <span>· Systems Limited</span></h3>
-                <p>Delivered enterprise features across distributed systems, mentored engineers, and contributed to architectural decisions, sprint planning, and technical estimates.</p>
-              </div>
-            </article>
-            <article class="timeline-entry reveal">
-              <span class="timeline-date">OCT 2021 — DEC 2022</span>
-              <div><h3>Development Consultant <span>· Systems Limited</span></h3>
-                <p>Designed backend services and scalable APIs with Node.js and microservices patterns, collaborating with QA and DevOps on performance and production stability.</p>
-              </div>
-            </article>
-            <article class="timeline-entry reveal">
-              <span class="timeline-date">JUN 2020 — OCT 2021</span>
-              <div><h3>Software Engineer <span>· Daniotech</span></h3>
-                <p>Built real-time collaboration with Socket.IO, Firebase authentication and notifications, analytics, and Electron desktop applications.</p>
-              </div>
-            </article>
-            <article class="timeline-entry reveal">
-              <span class="timeline-date">OCT 2019 — MAY 2020</span>
-              <div><h3>Software Engineer <span>· Softnotechs</span></h3>
-                <p>Customized POS software, built PHP and AngularJS applications, published Android apps, and delivered WordPress websites.</p>
-              </div>
-            </article>
-            <article class="timeline-entry reveal">
-              <span class="timeline-date">JAN 2018 — MAR 2020</span>
-              <div><h3>Co-Founder & Web Developer <span>· Grab a Bite</span></h3>
-                <p>Co-founded a startup, built its web platform from scratch, and contributed to architecture, customer relationships, and daily operations.</p>
-              </div>
-            </article>
-            <article class="timeline-entry reveal">
-              <span class="timeline-date">OCT 2016 — APR 2017</span>
-              <div><h3>Software Developer <span>· Atlantic Software</span></h3>
-                <p>Developed ActionScript 3 games and supported QA for PHP enterprise applications.</p>
-              </div>
-            </article>
-            <article class="timeline-entry reveal">
-              <span class="timeline-date">JUN 2015 — AUG 2015</span>
-              <div><h3>Internee <span>· Systems Limited</span></h3>
-                <p>Worked with Microsoft Dynamics CRM to map campus management software in collaboration with the Dynamics team.</p>
-              </div>
-            </article>
-          </div>
-          <aside class="credentials reveal">
-            <div class="credential-block">
-              <p class="eyebrow">Education</p>
-              <h3>BS, Computer Science</h3>
-              <p>Sir Syed CASE Institute of Technology<br />2012 — 2016</p>
-            </div>
-            <div class="credential-block">
-              <p class="eyebrow">Certification</p>
-              <h3>Big Data Certified</h3>
-            </div>
-            <div class="credential-block">
-              <p class="eyebrow">Top skills</p>
-              <div class="skill-pills">
-                <span>System Architecture</span>
-                <span>Microservices</span>
-                <span>ERP Software</span>
-                <span>Azure</span>
-                <span>AI / LLM</span>
-                <span>Technical Leadership</span>
-              </div>
-            </div>
-          </aside>
         </div>
       </section>
 

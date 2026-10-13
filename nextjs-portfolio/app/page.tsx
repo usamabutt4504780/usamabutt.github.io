@@ -663,7 +663,7 @@ export default function Home() {
         <section className="work section-wrap" id="employers">
           <div className="section-heading reveal">
             <div>
-              <p className="eyebrow">The teams behind the work</p>
+              <p className="eyebrow">The Companies I Have Worked With</p>
               <h2>
                 Companies <span className="serif-word">&amp; roles</span>
                 <span className="heading-period">.</span>
@@ -682,26 +682,6 @@ export default function Home() {
           <p className="employer-hint">
             Hover or focus a card to explore the roles, teams, and contributions.
           </p>
-        </section>
-
-        <section className="work section-wrap projects-section" id="projects">
-          <div className="section-heading reveal">
-            <div>
-              <p className="eyebrow">Selected work · product delivery</p>
-              <h2>
-                Projects <span className="serif-word">&amp; case studies</span>
-                <span className="heading-period">.</span>
-              </h2>
-            </div>
-            <p className="section-note">
-              A selection of products and platforms
-              <br />
-              I’ve helped bring to life.
-            </p>
-          </div>
-          <div className="project-card-grid">
-            {projects.map((project) => <ProjectCard project={project} key={project.number} />)}
-          </div>
         </section>
 
         <section className="about" id="about">
@@ -730,6 +710,26 @@ export default function Home() {
               <span>TECHNICAL STRATEGY · HANDS-ON ENGINEERING · TEAM LEADERSHIP</span>
               <span>IDEA&nbsp; → &nbsp;ARCHITECTURE&nbsp; → &nbsp;PRODUCTION</span>
             </div>
+          </div>
+        </section>
+
+          <section className="work section-wrap projects-section" id="projects">
+          <div className="section-heading reveal">
+            <div>
+              <p className="eyebrow">Selected work · product delivery</p>
+              <h2>
+                Projects <span className="serif-word">&amp; case studies</span>
+                <span className="heading-period">.</span>
+              </h2>
+            </div>
+            <p className="section-note">
+              A selection of products and platforms
+              <br />
+              I’ve helped bring to life.
+            </p>
+          </div>
+          <div className="project-card-grid">
+            {projects.map((project) => <ProjectCard project={project} key={project.number} />)}
           </div>
         </section>
 

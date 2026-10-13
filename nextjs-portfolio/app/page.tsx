@@ -25,6 +25,62 @@ const additionalTools = [
   "OAuth 2.0",
 ];
 
+type Project = {
+  name: string;
+  number: string;
+  category: string;
+  description: string;
+  technologies: string[];
+  url?: string;
+  previewUrl?: string;
+  visual: "simply-charge" | "qoplan" | "stza" | "descon";
+};
+
+const projects: Project[] = [
+  {
+    number: "01",
+    name: "Simply Charge",
+    category: "EV charging · Mobile product",
+    description:
+      "A product for EV users to find nearby or destination chargers, check live status, and control charging through a mobile app or RFID card.",
+    technologies: ["Mobile Apps", "Maps & Location", "EV Charging"],
+    url: "https://simplycharge.info",
+    previewUrl: "https://simplycharge.info",
+    visual: "simply-charge",
+  },
+  {
+    number: "02",
+    name: "QoPlan",
+    category: "Productivity · Mobile apps",
+    description:
+      "A free calendar-sharing app by Vanilla Technology for organizing social events, combining schedules, and managing RSVPs.",
+    technologies: ["iOS", "Android", "Calendar & RSVP"],
+    url: "https://qoplan.app/Home",
+    previewUrl: "https://qoplan.app/Home",
+    visual: "qoplan",
+  },
+  {
+    number: "03",
+    name: "STZA One Window Portal",
+    category: "Government · Regulatory platform",
+    description:
+      "A unified digital portal for technology-zone companies, startups, and developers to apply for licenses and manage regulatory compliance.",
+    technologies: ["Government", "Licensing", "Compliance"],
+    url: "https://www.stza.gov.pk/",
+    visual: "stza",
+  },
+  {
+    number: "04",
+    name: "Descon Bidding",
+    category: "Internal product · Project planning",
+    description:
+      "An internal application for estimating project timelines, budgets, and resources ahead of delivery to make project transitions smoother.",
+    technologies: ["Project Estimation", "Planning", "Resource Management"],
+    url: "https://www.descon.com/",
+    visual: "descon",
+  },
+];
+
 type Employer = {
   number: string;
   name: string;
@@ -200,9 +256,107 @@ function EmployerCard({ employer }: { employer: Employer }) {
   );
 }
 
+function ProjectPreview({ project }: { project: Project }) {
+  if (project.previewUrl) {
+    const previewHost = new URL(project.previewUrl).hostname;
+    return (
+      <div className="project-preview-frame">
+        <div className="project-browser-bar" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <small>{previewHost}</small>
+          <b>LIVE PREVIEW</b>
+        </div>
+        <iframe
+          src={project.previewUrl}
+          title={`${project.name} live website preview`}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        />
+      </div>
+    );
+  }
+
+  if (project.visual === "simply-charge") {
+    return (
+      <div className="project-illustration project-illustration-simply-charge" aria-label="Illustrative Simply Charge app preview">
+        <div className="project-illustration-top"><span>SIMPLY CHARGE / FIND A STATION</span><i /></div>
+        <div className="project-map-art">
+          <div className="project-map-roads" aria-hidden="true"><i /><i /><i /><i /></div>
+          <span className="project-map-pin pin-one">⚡</span><span className="project-map-pin pin-two">⚡</span><span className="project-map-pin pin-three">⚡</span>
+          <div className="project-map-info"><small>NEARBY CHARGER</small><strong>Available · 0.8 mi</strong><span>Fast charging · Open now</span></div>
+        </div>
+        <span className="project-preview-caption">ILLUSTRATIVE PREVIEW · APP REQUIRES SIGN-IN</span>
+      </div>
+    );
+  }
+
+  if (project.visual === "qoplan") {
+    return (
+      <div className="project-illustration project-illustration-qoplan" aria-label="Illustrative QoPlan calendar app preview">
+        <div className="project-illustration-top"><span>QOPLAN / SHARED CALENDAR</span><i /></div>
+        <div className="qoplan-calendar">
+          <div className="qoplan-calendar-heading"><span>YOUR SCHEDULE</span><strong>October <b>2026</b></strong></div>
+          <div className="qoplan-calendar-grid">
+            {["M", "T", "W", "T", "F", "S", "S", "28", "29", "30", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"].map((day, index) => (
+              <span className={index === 16 ? "is-selected" : undefined} key={`${day}-${index}`}>{day}</span>
+            ))}
+          </div>
+          <div className="qoplan-calendar-event"><i /><span><b>Team brunch</b><small>12:30 PM · 6 invited</small></span><strong>RSVP</strong></div>
+        </div>
+        <span className="project-preview-caption">ILLUSTRATIVE PREVIEW · APP REQUIRES SIGN-IN</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`project-illustration project-illustration-${project.visual}`} aria-label={`${project.name} illustrative preview`}>
+      <div className="project-illustration-top"><span>{project.visual === "stza" ? "STZA / ONE WINDOW" : "PROJECT CONTROL"}</span><i /></div>
+      <div className="project-illustration-body">
+        <div className="project-illustration-rail"><b /><b /><b /></div>
+        <div className="project-illustration-content">
+          <span className="project-illustration-kicker">{project.visual === "stza" ? "LICENSING PORTAL" : "BIDDING WORKSPACE"}</span>
+          <strong>{project.visual === "stza" ? "One Window Portal" : "Project estimate"}</strong>
+          <div className="project-mock-metrics"><span /><span /><span /></div>
+          <div className="project-mock-table"><i /><i /><i /><i /></div>
+        </div>
+      </div>
+      <span className="project-preview-caption">
+        {project.visual === "stza" ? "ILLUSTRATIVE PREVIEW · NO LIVE EMBED" : "LIVE SITE BLOCKS EMBED · USE LINK BELOW"}
+      </span>
+    </div>
+  );
+}
+
+function ProjectCard({ project }: { project: Project }) {
+  return (
+    <article className="project-card">
+      <div className="project-card-visual">
+        <span className="project-card-index">{project.number}</span>
+        <ProjectPreview project={project} />
+      </div>
+      <div className="project-card-copy">
+        <p className="project-category">{project.category}</p>
+        <h3>{project.name}</h3>
+        <p className="project-description">{project.description}</p>
+        <div className="project-tags">
+          {project.technologies.map((technology) => <span key={technology}>{technology}</span>)}
+        </div>
+        {project.url && (
+          <a className="project-link" href={project.url} target="_blank" rel="noreferrer">
+            Visit project <ExternalArrow />
+          </a>
+        )}
+      </div>
+    </article>
+  );
+}
+
 const navigation = [
   ["Technologies", "#technologies"],
-  ["Projects", "#work"],
+  ["Projects", "#projects"],
   ["About", "#about"],
   ["Contact", "#contact"],
 ];
@@ -449,7 +603,7 @@ export default function Home() {
                           : "Browser voice · not a voice clone"}
                   </span>
                 </div>
-                <a href="#work">Browse the portfolio <span aria-hidden="true">↓</span></a>
+                <a href="#projects">Browse the portfolio <span aria-hidden="true">↓</span></a>
               </div>
             </div>
           </div>
@@ -460,7 +614,7 @@ export default function Home() {
             isSpeaking={voiceStatus === "speaking"}
           />
 
-          <a className="scroll-cue" href="#work">
+          <a className="scroll-cue" href="#projects">
             <span /> Scroll to explore
           </a>
           <span className="hero-index" aria-hidden="true">
@@ -506,7 +660,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="work section-wrap" id="work">
+        <section className="work section-wrap" id="employers">
           <div className="section-heading reveal">
             <div>
               <p className="eyebrow">The teams behind the work</p>
@@ -530,6 +684,26 @@ export default function Home() {
           </p>
         </section>
 
+        <section className="work section-wrap projects-section" id="projects">
+          <div className="section-heading reveal">
+            <div>
+              <p className="eyebrow">Selected work · product delivery</p>
+              <h2>
+                Projects <span className="serif-word">&amp; case studies</span>
+                <span className="heading-period">.</span>
+              </h2>
+            </div>
+            <p className="section-note">
+              A selection of products and platforms
+              <br />
+              I’ve helped bring to life.
+            </p>
+          </div>
+          <div className="project-card-grid">
+            {projects.map((project) => <ProjectCard project={project} key={project.number} />)}
+          </div>
+        </section>
+
         <section className="about" id="about">
           <div className="about-inner section-wrap">
             <div className="about-kicker reveal">
@@ -548,7 +722,7 @@ export default function Home() {
                 and mentor engineers. I partner with product, DevOps, and stakeholders from architecture and database
                 design through CI/CD, cloud infrastructure, and production support.
               </p>
-              <a className="text-link text-link-light" href="#work">
+              <a className="text-link text-link-light" href="#projects">
                 Explore my work <span aria-hidden="true">↘</span>
               </a>
             </div>
